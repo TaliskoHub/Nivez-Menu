@@ -1,5 +1,5 @@
 --[[
-    Cheat Menu de Teste (Aimbot, ESP, God, Silent Aim)
+    Cheat Menu de Teste (Aimbot 50%, ESP, God, Silent Aim)
     Menu abre/fecha ao clicar uma bolinha no canto.
     Use APENAS para teste de anti-cheat!
 --]]
@@ -12,10 +12,9 @@ local UIS = game:GetService("UserInputService")
 -- CONFIGS
 local RGB = Color3.fromRGB(255, 0, 0)
 local SilentPercent = 50
+local AimbotPercent = 50 -- Agora o aimbot só ativa 50% das vezes
 local UI_TOGGLE_POS = UDim2.new(0, 10, 0, 200)
 
--- Função de Aimbot - sempre gruda na cabeça mais próxima
-local AimbotActive = false
 local function getClosestPlayer()
     local mouse = LocalPlayer:GetMouse()
     local closest, dist = nil, math.huge
@@ -32,12 +31,13 @@ local function getClosestPlayer()
     return closest
 end
 
+local AimbotActive = false
 local aimbotConn
 local function enableAimbot()
     AimbotActive = true
     if aimbotConn then aimbotConn:Disconnect() end
     aimbotConn = RunService.RenderStepped:Connect(function()
-        if AimbotActive then
+        if AimbotActive and math.random(1,100) <= AimbotPercent then
             local p = getClosestPlayer()
             if p and p.Character and p.Character:FindFirstChild("Head") then
                 workspace.CurrentCamera.CFrame = CFrame.new(
@@ -192,7 +192,7 @@ local function createButton(y, text, callback)
 end
 
 -- Botões
-local aimBtn = createButton(0, "Aimbot Head", function(on)
+local aimBtn = createButton(0, "Aimbot Head (50%)", function(on)
     if on then enableAimbot() else disableAimbot() end
 end)
 local espBtn = createButton(1, "ESP Vermelho", function(on)
